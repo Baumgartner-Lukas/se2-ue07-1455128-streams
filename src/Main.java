@@ -45,6 +45,7 @@ public class Main {
     static List<String> findLines(String inFile, String text) throws IOException {
         return Files.lines(Paths.get(inFile))
                 //regex to find the exact word not a substring as with contains
+                //source: http://www.vogella.com/tutorials/JavaRegularExpressions/article.html
                 .filter(w -> w.matches("(?s).*\\b" + text + "\\b.*"))
                 .collect(Collectors.toList());
     }
