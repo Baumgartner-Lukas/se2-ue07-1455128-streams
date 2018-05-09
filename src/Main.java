@@ -1,15 +1,12 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.counting;
 
 public class Main {
 
@@ -18,8 +15,6 @@ public class Main {
         final String faustPath = "faust_1.txt";
         final String outPath = "outputtext.txt";
         final String faustOutPath = "outputfaus.txt";
-
-
 
         System.out.println("Find first line with: five");
         System.out.println(findLine(filePath, "five"));
@@ -49,13 +44,15 @@ public class Main {
         System.out.println(averageLineLength(filePath));
         System.out.println(averageLineLength(faustPath));
 
-//        System.out.println("Get average nr of words in line");
-//        System.out.println(averageWordsInLine(filePath));
+        System.out.println("Get average nr of words in line");
+        System.out.println(averageWordsInLine(filePath));
+        System.out.println(averageWordsInLine(faustPath));
         System.out.println("group words by their first character");
         System.out.println(alphaGrouping(filePath));
         System.out.println(alphaGrouping(faustPath));
 
     }
+
     //-------------------------------- a --------------------------------
     static Optional<String> findLine(String inFile, String text) throws IOException {
         return Files.lines(Paths.get(inFile))
@@ -85,7 +82,7 @@ public class Main {
     }
 
     //-------------------------------- c --------------------------------
-    static Stream<String> wordStream(String inFile) throws IOException{
+    static Stream<String> wordStream(String inFile) throws IOException {
         return Files.lines(Paths.get(inFile))
                 .flatMap(line -> Stream.of(line.split("[ .,;?!:()-]")))
                 .filter(word -> word.length() > 0)
@@ -94,13 +91,13 @@ public class Main {
                 .distinct();
     }
 
-    static List<String> words(String inFile) throws IOException{
+    static List<String> words(String inFile) throws IOException {
         return wordStream(inFile)
                 .collect(Collectors.toList());
     }
 
     //-------------------------------- d --------------------------------
-    static double averageLineLength(String inFile) throws IOException{
+    static double averageLineLength(String inFile) throws IOException {
         return Files.lines(Paths.get(inFile))
                 //disclaimer: does not count empty lines as a line
                 //i.e. sampletext.txt has 7 lines (2 empty) => 5 lines with avg. 29.4 chars
@@ -108,17 +105,17 @@ public class Main {
                 .collect(Collectors.averagingDouble(String::length));
     }
 
-    static double averageWordsInLine (String inFile) throws IOException{
-        return 0;
+    static double averageWordsInLine(String inFile) throws IOException {
+
         //ToDo: implement
-//        return Files.lines(Paths.get(inFile))
-//                .flatMap(line -> Stream.of(line.split("[ .,;?!:()-]")))
-//                .filter(word -> word.length() > 0)
-//                .count();
+        return Files.lines(Paths.get(inFile))
+                .flatMap(line -> Stream.of(line.split("\\s")))
+                .filter(word -> word.length() > 0)
+                .collect(Collectors.averagingDouble(String::length));
     }
 
     //-------------------------------- e --------------------------------
-    static Map<Character, List<String>> alphaGrouping(String inFile) throws IOException{
+    static Map<Character, List<String>> alphaGrouping(String inFile) throws IOException {
         return wordStream(inFile)
                 .filter(w -> w.length() > 0)
                 .map(String::toLowerCase)
